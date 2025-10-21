@@ -26,7 +26,7 @@ from tool_visit import *
 OBS_START = '<tool_response>'
 OBS_END = '\n</tool_response>'
 
-MAX_LLM_CALL_PER_RUN = int(os.getenv('MAX_LLM_CALL_PER_RUN', 100))
+MAX_LLM_CALL_PER_RUN = int(os.getenv('MAX_LLM_CALL_PER_RUN', 10))
 
 TOOL_CLASS = [
     FileParser(),
@@ -56,10 +56,10 @@ class MultiTurnReactAgent(FnCallAgent):
     def sanity_check_output(self, content):
         return "<think>" in content and "</think>" in content
     
-    def call_server(self, msgs, planning_port, max_tries=10):
+    def call_server(self, msgs, planning_port, max_tries=3):
         
-        openai_api_key = "EMPTY"
-        openai_api_base = f"http://127.0.0.1:{planning_port}/v1"
+        openai_api_key = "sk-661f23653dd74f7688d0dfcd4f2d41ea"
+        openai_api_base = f"https://dashscope.aliyuncs.com/compatible-mode/v1"
 
         client = OpenAI(
             api_key=openai_api_key,
@@ -110,10 +110,11 @@ class MultiTurnReactAgent(FnCallAgent):
         return f"vllm server error!!!"
 
     def count_tokens(self, messages):
-        tokenizer = AutoTokenizer.from_pretrained(self.llm_local_path) 
-        full_prompt = tokenizer.apply_chat_template(messages, tokenize=False)
-        tokens = tokenizer(full_prompt, return_tensors="pt")
-        token_count = len(tokens["input_ids"][0])
+        # tokenizer = AutoTokenizer.from_pretrained(self.llm_local_path) 
+        # full_prompt = tokenizer.apply_chat_template(messages, tokenize=False)
+        # tokens = tokenizer(full_prompt, return_tensors="pt")
+        # token_count = len(tokens["input_ids"][0])
+        token_count=len(str(messages))
         
         return token_count
 
