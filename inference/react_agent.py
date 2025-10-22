@@ -133,8 +133,10 @@ class MultiTurnReactAgent(FnCallAgent):
         system_prompt = SYSTEM_PROMPT
         cur_date = today_date()
         system_prompt = system_prompt + str(cur_date)
-        messages = [{"role": "system", "content": system_prompt}, {"role": "user", "content": question}]
         num_llm_calls_available = MAX_LLM_CALL_PER_RUN
+
+        messages = [{"role": "system", "content": system_prompt.replace('{num_llm_calls}', str(num_llm_calls_available))}, {"role": "user", "content": question}]
+        
         round = 0
         while num_llm_calls_available > 0:
             # Check whether time is reached
@@ -217,10 +219,13 @@ class MultiTurnReactAgent(FnCallAgent):
             termination = 'answer not found'
             if num_llm_calls_available == 0:
                 termination = 'exceed available llm calls'
+        system_prompt=SYSTEM_PROMPT+ str(cur_date)
+        sys_s={"role": "system", "content": system_prompt.replace('{num_llm_calls}', str(num_llm_calls_available))}
+        messages[0] = sys_s
         result = {
             "question": question,
             "answer": answer,
-            "messages": messages,
+            "messages": messages ,
             "prediction": prediction,
             "termination": termination
         }

@@ -17,8 +17,10 @@ import tiktoken
 VISIT_SERVER_TIMEOUT = int(os.getenv("VISIT_SERVER_TIMEOUT", 200))
 WEBCONTENT_MAXLENGTH = int(os.getenv("WEBCONTENT_MAXLENGTH", 150000))
 
-JINA_API_KEYS = os.getenv("JINA_API_KEYS", "")
+JINA_API_KEYS = os.getenv("JINA_API_KEYS", "jina_6b073dea4c9743c2ae6f281d50b7070brgX5hw-ylzEtxDM3iaSCPT2m8NvE")
 
+#地址：https://jina.ai/api-dashboard
+#账号密码：使用Google登录
 
 @staticmethod
 def truncate_to_tokens(text: str, max_tokens: int = 95000) -> str:
@@ -97,9 +99,9 @@ class Visit(BaseTool):
         return response.strip()
         
     def call_server(self, msgs, max_retries=2):
-        api_key = os.environ.get("API_KEY")
-        url_llm = os.environ.get("API_BASE")
-        model_name = os.environ.get("SUMMARY_MODEL_NAME", "")
+        api_key = os.environ.get("API_KEY",'sk-661f23653dd74f7688d0dfcd4f2d41ea')
+        url_llm = os.environ.get("API_BASE",'https://dashscope.aliyuncs.com/compatible-mode/v1')
+        model_name = os.environ.get("SUMMARY_MODEL_NAME", "qwen-plus")
         client = OpenAI(
             api_key=api_key,
             base_url=url_llm,

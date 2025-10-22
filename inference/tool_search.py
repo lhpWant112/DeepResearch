@@ -12,8 +12,10 @@ import json
 import os
 
 
-SERPER_KEY=os.environ.get('SERPER_KEY_ID')
+SERPER_KEY=os.environ.get('SERPER_KEY_ID','6264e54983de95be8dba69a1f566793f567166eb')
 
+#工具地址：https://serper.dev/playground
+#账号密码：195954678** / a1369242**
 
 @register_tool("search", allow_overwrite=True)
 class Search(BaseTool):
